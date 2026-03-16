@@ -1,0 +1,32 @@
+<?php
+/*
+Template Name: Search Page
+*/
+get_header();
+?>
+
+<div class="wrap">
+
+    <div id="primary" class="content-area">
+        <main id="main" class="site-main">
+
+            <h1>Search Posts</h1>
+
+            <p>
+                My site features articles about 
+                <a href="<?php echo home_url('/category/wordpress/'); ?>">WordPress</a>,
+                <a href="<?php echo home_url('/category/web-design/'); ?>">Web Design</a>,
+                <a href="<?php echo home_url('/category/website-development/'); ?>">Development</a>,
+                and <a href="<?php echo home_url('/category/css/'); ?>">CSS</a>.
+            </p>
+
+            <p>To search my website, please use the form below:</p>
+
+            <?php get_search_form(); ?>
+
+        </main>
+    </div>
+
+</div>
+
+<?php get_footer(); ?>
