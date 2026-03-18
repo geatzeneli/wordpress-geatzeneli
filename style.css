@@ -100,3 +100,86 @@ article {
     border-radius:10px;
     box-shadow:0 8px 20px rgba(0,0,0,0.2);
 }
+
+/* The "Oops, My Bad" 404 Styling */
+.error-404.not-found {
+    padding: 80px 20px;
+    text-align: center;
+    background: #f9f9f9;
+    border-radius: 20px;
+    margin: 40px auto;
+    max-width: 800px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+/* Let's make that 404 title pop */
+.error-404 .page-title {
+    font-size: 8rem;
+    margin: 0;
+    color: #ff4757; /* A cheeky "oops" red */
+    letter-spacing: -5px;
+    line-height: 1;
+    position: relative;
+    display: inline-block;
+}
+
+/* Adding a little "shrug" or hover effect */
+.error-404 .page-title:after {
+    content: "¯\_(ツ)_/¯";
+    display: block;
+    font-size: 1.5rem;
+    letter-spacing: normal;
+    color: #2f3542;
+    margin-top: 10px;
+}
+
+.error-404 h2 {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.2rem;
+    color: #57606f;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.error-404 p {
+    font-style: italic;
+    color: #747d8c;
+    margin-bottom: 30px;
+}
+
+/* Sprucing up the search form */
+.error-404 .search-form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.error-404 .search-field {
+    border: 2px solid #dfe4ea;
+    padding: 12px 20px;
+    border-radius: 50px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.error-404 .search-field:focus {
+    border-color: #ff4757;
+}
+
+.error-404 .search-submit {
+    background: #2f3542;
+    color: white;
+    border: none;
+    padding: 0 25px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.error-404 .search-submit:hover {
+    background: #ff4757;
+}
