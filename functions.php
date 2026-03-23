@@ -14,6 +14,7 @@ function ds_theme_assets() {
 
     wp_enqueue_style('slider-style', get_template_directory_uri() . '/css/slider.css', array('ds-style'), '1.0', 'all');
 
+    // Added 'popper.js' dependency if you plan to use Bootstrap 4 tooltips/popovers
     wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js', array('jquery'), '4.6.2', true);
 
     wp_enqueue_script('ds-script', get_template_directory_uri() . '/js/custom.js', array('jquery', 'bootstrap-js'), '1.0', true);
@@ -46,7 +47,7 @@ add_action('after_setup_theme', 'ds_setup');
 function ds_widgets_init() {
     register_sidebar(array(
         'name'          => __('Primary Sidebar', 'ds_theme'),
-        'id'            => 'sidebar-1',
+        'id'             => 'sidebar-1',
         'before_widget' => '<aside id="%1$s" class="widget %2$s">',
         'after_widget'  => '</aside>',
         'before_title'  => '<h3 class="widget-title">',
@@ -73,19 +74,19 @@ add_action('widgets_init', 'ds_register_widgets');
 
 /**
  * 5. Dynamic Post Limiting (User Session Based)
- * This checks if the user has set a preference on your new settings page.
  */
 function my_limit_posts_on_index($query) {
+    // Only affect the front-end main query
     if ( !is_admin() && $query->is_main_query() && (is_home() || is_archive()) ) {
         
-        // Start session to read user preference
-        if ( !session_id() ) { session_start(); }
+        // Start session safely if not already started
+        if ( !session_id() && !headers_sent() ) { 
+            session_start(); 
+        }
 
         if ( isset($_SESSION['user_post_limit']) ) {
-            // Use what the user chose on the settings page
-            $limit = $_SESSION['user_post_limit'];
+            $limit = intval($_SESSION['user_post_limit']);
         } else {
-            // Default fallback if they haven't visited the settings page yet
             $limit = 5; 
         }
         
@@ -93,3 +94,38 @@ function my_limit_posts_on_index($query) {
     }
 }
 add_action('pre_get_posts', 'my_limit_posts_on_index');
+
+/**
+ * 6. Custom Post Type: Movies
+ */
+function our_custom_movie(){
+    $labels = array(
+        'name'                => _x('Movies', 'post type general name', 'ds_theme'),
+        'singular_name'       => _x('Movie', 'post type singular name', 'ds_theme'), // Fixed: Should be singular
+        'add_new'             => _x('Add New', 'movie', 'ds_theme'),
+        'add_new_item'        => __('Add New Movie', 'ds_theme'),
+        'edit_item'           => __('Edit Movie', 'ds_theme'),
+        'new_item'            => __('New Movie', 'ds_theme'),
+        'all_items'           => __('All Movies', 'ds_theme'),
+        'view_item'           => __('View Movie', 'ds_theme'),
+        'search_items'        => __('Search Movies', 'ds_theme'),
+        'not_found'           => __('No movies found', 'ds_theme'),
+        'not_found_in_trash'  => __('No movies found in the Trash', 'ds_theme'),
+        'menu_name'           => 'Movies'
+    );
+
+    $args = array(
+        'labels'             => $labels,
+        'description'        => 'Movies and single movie details',
+        'public'             => true,
+        'publicly_queryable' => true,
+        'menu_position'      => 5, // Fixed: spelling (was menu_postion)
+        'supports'           => array('title', 'editor', 'thumbnail', 'excerpt', 'comments'),
+        'has_archive'        => true,
+        'rewrite'            => array('slug' => 'movies'),
+        'show_in_rest'       => true, // Enables Gutenberg
+    );
+
+    register_post_type('movies', $args);
+}
+add_action('init', 'our_custom_movie'); // Fixed: Added missing semicolon
